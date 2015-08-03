@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Swiper demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/swiper.css">
+    <link rel="stylesheet" href="styles/water.css">
+    
+
+</head>
+<body>
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+
+                <div class = "swiper-slide">
+                  <label >item-1</label>
+                  <img src="images/gui/gui_fr_main_bigmac3.png"  />
+                </div>
+            
+                 <div class = "swiper-slide">
+                  <label >item-2</label>
+                  <img src="images/gui/Gui_fr_main_chicklover_bacon.png" />
+                </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-3</label>
+                  <img src="images/gui/gui_fr_main_mcfarmer1.png"  />
+                 </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-4</label>
+                  <img src="images/gui/gui_main_grande_Italia.png" />
+                  </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-5</label>
+                  <img src="images/gui/gui_main_HM_cheeseburger_gartensalat.png"  />
+                  </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-6</label>
+                  <img src="images/gui/gui_main_HM_cheeseburger_pommes.png"  />
+                  </div>
+                 
+                  <div class = "swiper-slide">
+                  <label >Item 7</label>
+                  <img src="images/gui/gui_main_hmcheeseburger.png"  />
+                  </div>
+
+                <div class = "swiper-slide">
+                  <label >item-1</label>
+                  <img src="images/gui/gui_fr_main_bigmac3.png"  />
+                </div>
+            
+                 <div class = "swiper-slide">
+                  <label >item-2</label>
+                  <img src="images/gui/Gui_fr_main_chicklover_bacon.png" />
+                </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-3</label>
+                  <img src="images/gui/gui_fr_main_mcfarmer1.png"  />
+                 </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-4</label>
+                  <img src="images/gui/gui_main_grande_Italia.png" />
+                  </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-5</label>
+                  <img src="images/gui/gui_main_HM_cheeseburger_gartensalat.png"  />
+                  </div>
+                
+                  <div class = "swiper-slide">
+                  <label >item-6</label>
+                  <img src="images/gui/gui_main_HM_cheeseburger_pommes.png"  />
+                  </div>
+                 
+                  <div class = "swiper-slide">
+                  <label >Item 7</label>
+                  <img src="images/gui/gui_main_hmcheeseburger.png"  />
+                  </div>
+            
+
+                
+
+                  
+        </div>
+       
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    
+    <script src="js/swiper.js"></script>
+    <!--<script src="js/swiperV2.min.js"></script>-->
+
+
+    <script>
+    
+    var swiper = function (){ //initial settings slider
+        
+        new Swiper('.swiper-container', {
+
+            direction: 'vertical',
+            loop: true,
+            //loopedSlides: 14,
+            slideToClickedSlide: true,
+            slidesPerView: 7,
+            centeredSlides: true,        
+            spaceBetween: 0,
+            //resistance: false,
+            freeMode: true,
+            //effect: "slide",
+            //resistanceRatio: 10,
+            onInit: slidesTransform,
+            onSliderMove: slidesTransform,
+            onSlideChangeStart: slidesTransform,
+            onSlideChangeEnd: slidesTransform,
+            //onTouchStart: slidesTransform,
+            //onTransitionStart: slidesTransform,
+            //onTransitionEnd: slidesTransform,
+            //onTap: slidesTransform
+           
+        });
+        
+    }
+    
+    
+     var slidesTransform = function (){
+        return true;
+        var $slides = $( ".swiper-slide" );
+        var slidesHeight  = $( ".swiper-slide" ).height();
+
+        var container = {
+            slidesTop: 0,
+            slidesBottom: 0,
+            height: $(".swiper-container").height(),
+            top: $(".swiper-container").offset().top,
+            
+        }
+        var center = {
+            half: (container.height/2) + container.top,
+            max: (container.height/2) + container.top+ slidesHeight/2,
+            min: (container.height/2) + container.top - slidesHeight/2
+        }
+
+        $slides.each(function (index){
+            var $slide = $(this),
+                slideTop = $slide.offset().top,
+                slidePerspective = 0,
+                slideOpacity = 1,
+                slideScale = 1,
+                slideMarginTop = 0;
+
+
+            if ( slideTop < center.min || slideTop > center.max  ){ //se não estiver proximo ao centro
+                slideOpacity = 0.5;
+                slideScale = 0.8;
+                if ( slideTop < (0 + container.top) || slideTop > container.height ){ // se ultrapassar as bordas
+                    slideOpacity = 0.2;
+                    slideScale = 0.6;
+                    
+                } else{
+                    
+                    var dH = Math.abs(slideTop - center.half);
+                    var coefPerspective = dH/10 * 2;
+                    var coefMarginTop = dH/10;
+                    var coefScaleOpactiy = dH/1000;
+                    
+                    slideScale = 1 - coefScaleOpactiy;
+                    slideOpacity = 0.9 - coefScaleOpactiy;
+                    
+                    if ( slideTop < center.min ){
+                        slidePerspective = coefPerspective;
+                        //slideMarginTop *= -1;
+                    }
+                }
+                
+                
+                
+            }
+
+            $slide.css({
+                opacity: slideOpacity,
+                'margin-top': slideMarginTop,
+                'transform': 'scale(' + slideScale + ') rotateX(' + slidePerspective + 'deg ) '
+            });
+
+        });
+    
+    }
+     
+    $(function (){
+        var originals = 0,
+            clones = 0,
+            $clone = $( ".swiper-slide" ).clone();
+         
+        originals = $( ".swiper-slide" ).length;
+        for( i = 0; i <= 1; i++ ){
+            $clone = $( ".swiper-slide" ).clone();
+            $(".swiper-wrapper").append($clone);
+            $clone = $( ".swiper-slide" ).clone();
+            $(".swiper-wrapper").prepend($clone);
+        }
+        clones =  $(".swiper-wrapper .swiper-slide").length;
+        console.log("Originais: " + originals, "| Clones: " + clones );
+        swiper();
+    });
+    
+    </script>
+</body>
+</html>
